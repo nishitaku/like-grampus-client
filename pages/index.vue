@@ -63,6 +63,27 @@ export default {
         }
       ]
     }
+  },
+  mounted() {
+    try {
+      liff.init(
+        { liffId: process.env.LIFF_ID },
+        async (data) => {
+          if (liff.isLoggedIn()) {
+            console.log(`LIFF logged in`, data)
+            const profile = await liff.getProfile()
+            this.username = profile.displayName
+          } else {
+            console.log(`LIFF not logged in`)
+          }
+        },
+        (err) => {
+          console.log(`LIFF initialization failed`, err)
+        }
+      )
+    } catch (err) {
+      console.error(`liff getProfile err`)
+    }
   }
 }
 </script>
