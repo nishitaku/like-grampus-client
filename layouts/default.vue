@@ -11,12 +11,11 @@
   </v-app>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      title: 'RANKING'
-    }
-  }
+<script lang="ts">
+import { Component, Vue } from 'nuxt-property-decorator'
+
+@Component
+export default class DefaultComponent extends Vue {
+  title = 'RANKING'
 }
 </script>

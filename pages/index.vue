@@ -39,39 +39,41 @@
   </v-container>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      username: 'テスト',
-      rank: '5',
-      items: [
-        {
-          displayName: 'AAA',
-          score: 0.9,
-          uploadImgUrl:
-            'https://upload-images.s3.jp-tok.cloud-object-storage.appdomain.cloud/f33e07cade6721fd86c7af1676d2a6.jpg'
-        },
-        {
-          displayName: 'AAA',
-          score: 0.9,
-          uploadImgUrl:
-            'https://upload-images.s3.jp-tok.cloud-object-storage.appdomain.cloud/f33e07cade6721fd86c7af1676d2a6.jpg'
-        },
-        {
-          displayName: 'AAA',
-          score: 0.9,
-          uploadImgUrl:
-            'https://upload-images.s3.jp-tok.cloud-object-storage.appdomain.cloud/f33e07cade6721fd86c7af1676d2a6.jpg'
-        }
-      ],
-      rankingData: null
+<script lang="ts">
+import { Component, Vue } from 'nuxt-property-decorator'
+import axios from 'axios'
+
+@Component
+export default class IndexComponent extends Vue {
+  username = 'テスト'
+  rank = '5'
+  items = [
+    {
+      displayName: 'AAA',
+      score: 0.9,
+      uploadImgUrl:
+        'https://upload-images.s3.jp-tok.cloud-object-storage.appdomain.cloud/f33e07cade6721fd86c7af1676d2a6.jpg'
+    },
+    {
+      displayName: 'AAA',
+      score: 0.9,
+      uploadImgUrl:
+        'https://upload-images.s3.jp-tok.cloud-object-storage.appdomain.cloud/f33e07cade6721fd86c7af1676d2a6.jpg'
+    },
+    {
+      displayName: 'AAA',
+      score: 0.9,
+      uploadImgUrl:
+        'https://upload-images.s3.jp-tok.cloud-object-storage.appdomain.cloud/f33e07cade6721fd86c7af1676d2a6.jpg'
     }
-  },
+  ]
+
+  rankingData: any = {}
+
   async mounted() {
     try {
       liff.init(
-        { liffId: process.env.LIFF_ID },
+        { liffId: process.env.LIFF_ID || '' },
         async (data) => {
           if (liff.isLoggedIn()) {
             console.log(`LIFF logged in`, data)
@@ -86,11 +88,11 @@ export default {
         }
       )
 
-      const response = await this.$axios.$get('.netlify/functions/hello')
+      const response = await axios.get('.netlify/functions/hello')
       console.log(`reponse=${JSON.stringify(response)}`)
       this.rankingData = response
     } catch (err) {
-      console.error(`liff getProfile err`)
+      console.error(`${err}`)
     }
   }
 }
