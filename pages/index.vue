@@ -4,7 +4,7 @@
       <div class="text-center">{{ username }}さんの順位 {{ rank }}位</div>
     </v-row>
     <v-row justify="center">
-      <div class="text-center">{{ rankingData }}</div>
+      <div class="text-center">{{ similarityRecords }}</div>
     </v-row>
     <v-row justify="center">
       <v-card width="80%">
@@ -41,7 +41,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
-import axios from 'axios'
+import { kintoneStore } from '~/store'
 
 @Component
 export default class IndexComponent extends Vue {
@@ -68,7 +68,9 @@ export default class IndexComponent extends Vue {
     }
   ]
 
-  rankingData: any = {}
+  get similarityRecords() {
+    return kintoneStore.records
+  }
 
   async mounted() {
     try {
@@ -88,9 +90,7 @@ export default class IndexComponent extends Vue {
         }
       )
 
-      const response = await axios.get('.netlify/functions/hello')
-      console.log(`reponse=${JSON.stringify(response)}`)
-      this.rankingData = response
+      await kintoneStore.getRecords()
     } catch (err) {
       console.error(`${err}`)
     }
