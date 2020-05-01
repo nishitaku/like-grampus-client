@@ -6,8 +6,9 @@
   "private": true,
   "scripts": {
     "dev": "nuxt-ts",
+    "prebuild": "yarn && cd functions && yarn",
     "build": "nuxt-ts build && yarn build:functions",
-    "build:functions": "cd functions && yarn install && yarn build",
+    "build:functions": "cd functions && yarn build",
     "generate": "nuxt-ts generate",
     "start": "nuxt-ts start",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore ."
