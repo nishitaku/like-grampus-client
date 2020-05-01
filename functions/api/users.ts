@@ -14,9 +14,9 @@ export const handler: Handler = async (
   console.log(`context=${JSON.stringify(context)}`)
   let response: Response
   if (event.httpMethod === 'GET') {
-    const kintoneClient = createClassifiedAppClient()
+    const kintoneClient = createUserAppClient()
     const result = await kintoneClient.record.getRecords({
-      app: process.env.KINTONE_CLASSIFIED_APP_ID || ''
+      app: process.env.KINTONE_USER_APP_ID || ''
     })
     response = {
       statusCode: 200,
@@ -34,11 +34,11 @@ export const handler: Handler = async (
   return response
 }
 
-function createClassifiedAppClient(): KintoneRestAPIClient {
+function createUserAppClient(): KintoneRestAPIClient {
   const client = new KintoneRestAPIClient({
     baseUrl: process.env.KINTONE_BASE_URL || '',
     auth: {
-      apiToken: process.env.KINTONE_CLASSIFIED_APP_API_TOKEN || ''
+      apiToken: process.env.KINTONE_USER_APP_API_TOKEN || ''
     }
   })
   return client
