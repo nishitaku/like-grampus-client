@@ -7,37 +7,31 @@
       <v-card width="80%">
         <v-list two-line disabled>
           <v-list-item-group>
-            <template v-for="(item, index) in items">
-              <v-list-item :key="item.uploadImgUrl">
+            <template v-for="(record, index) in similarityRecordsWithUserName">
+              <v-list-item :key="record.id">
                 <v-list-item-icon>
                   <v-icon>mdi-star</v-icon>
                 </v-list-item-icon>
                 <v-list-item-content>
                   <v-list-item-title
-                    v-text="`${item.displayName} さん`"
+                    v-text="`${record.lineDisplayName} さん`"
                   ></v-list-item-title>
                   <v-list-item-subtitle
-                    v-text="item.score"
+                    v-text="record.score"
                   ></v-list-item-subtitle>
                 </v-list-item-content>
                 <v-list-item-avatar>
-                  <v-img :src="item.uploadImgUrl"></v-img>
+                  <v-img :src="record.imageUrl"></v-img>
                 </v-list-item-avatar>
               </v-list-item>
               <v-divider
                 v-if="index + 1 < items.length"
-                :key="item.uploadImgUrl"
+                :key="record.id"
               ></v-divider>
             </template>
           </v-list-item-group>
         </v-list>
       </v-card>
-    </v-row>
-    <v-row justify="center">
-      <div class="text-center">{{ similarityRecords }}</div>
-    </v-row>
-    <v-row justify="center">
-      <div class="text-center">{{ userRecords }}</div>
     </v-row>
   </v-container>
 </template>
@@ -45,6 +39,15 @@
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
 import { kintoneStore } from '~/store'
+
+interface SimilarityWithUserName {
+  id: string
+  lineDisplayName: string
+  linePictureUrl: string
+  className: string
+  score: string
+  imageUrl: string
+}
 
 @Component
 export default class IndexComponent extends Vue {
@@ -71,12 +74,30 @@ export default class IndexComponent extends Vue {
     }
   ]
 
-  get similarityRecords() {
-    return kintoneStore.similarityRecords
-  }
-
-  get userRecords() {
-    return kintoneStore.userRecords
+  get similarityRecordsWithUserName() {
+    const similarityRecords = kintoneStore.similarityRecords
+    const userRecords = kintoneStore.userRecords
+    const result: SimilarityWithUserName[] = similarityRecords.map(
+      (similarityRecord) => {
+        const matchedUser = userRecords.find(
+          (userRecord) =>
+            userRecord.line_user_id.value ===
+            similarityRecord.line_user_id.value
+        )
+        const record: SimilarityWithUserName = {
+          id: similarityRecord.$id.value,
+          lineDisplayName: matchedUser
+            ? matchedUser.line_display_name.value
+            : '',
+          linePictureUrl: matchedUser ? matchedUser.line_picture_url.value : '',
+          className: similarityRecord.class_name.value,
+          score: similarityRecord.score.value,
+          imageUrl: similarityRecord.image_url.value
+        }
+        return record
+      }
+    )
+    return result
   }
 
   async mounted() {

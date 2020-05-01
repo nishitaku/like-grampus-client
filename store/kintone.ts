@@ -7,6 +7,7 @@ export interface KintoneRecord {
 }
 
 export interface SimilarityRecord {
+  $id: KintoneRecord
   line_user_id: KintoneRecord
   class_name: KintoneRecord
   score: KintoneRecord
