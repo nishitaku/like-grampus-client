@@ -1,4 +1,3 @@
 [build]
-  Command = "yarn build && yarn --cwd ./functions install && yarn --cwd ./functions run build"
-  functions = "functions/dist"
+  Command = "yarn build"
   publish = "dist"
