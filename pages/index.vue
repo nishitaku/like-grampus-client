@@ -4,9 +4,6 @@
       <div class="text-center">{{ username }}さんの順位 {{ rank }}位</div>
     </v-row>
     <v-row justify="center">
-      <div class="text-center">{{ similarityRecords }}</div>
-    </v-row>
-    <v-row justify="center">
       <v-card width="80%">
         <v-list two-line disabled>
           <v-list-item-group>
@@ -35,6 +32,12 @@
           </v-list-item-group>
         </v-list>
       </v-card>
+    </v-row>
+    <v-row justify="center">
+      <div class="text-center">{{ similarityRecords }}</div>
+    </v-row>
+    <v-row justify="center">
+      <div class="text-center">{{ userRecords }}</div>
     </v-row>
   </v-container>
 </template>
@@ -69,7 +72,11 @@ export default class IndexComponent extends Vue {
   ]
 
   get similarityRecords() {
-    return kintoneStore.records
+    return kintoneStore.similarityRecords
+  }
+
+  get userRecords() {
+    return kintoneStore.userRecords
   }
 
   async mounted() {
@@ -90,7 +97,8 @@ export default class IndexComponent extends Vue {
         }
       )
 
-      await kintoneStore.getRecords()
+      await kintoneStore.getSimilarityRecords()
+      await kintoneStore.getUserRecords()
     } catch (err) {
       console.error(`${err}`)
     }

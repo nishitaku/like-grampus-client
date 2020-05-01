@@ -15,23 +15,45 @@ export interface SimilarityRecord {
   updated_at: KintoneRecord
 }
 
+export interface UserRecord {
+  line_user_id: KintoneRecord
+  line_display_name: KintoneRecord
+  line_picture_url: KintoneRecord
+  line_user_language: KintoneRecord
+  created_at: KintoneRecord
+  updated_at: KintoneRecord
+}
+
 @Module({
   name: 'kintone',
   stateFactory: true,
   namespaced: true
 })
 export default class KintoneStore extends VuexModule {
-  records: SimilarityRecord[] = []
+  similarityRecords: SimilarityRecord[] = []
+  userRecords: UserRecord[] = []
 
   @Mutation
-  addRecord(record: SimilarityRecord) {
-    this.records = [...this.records, record]
+  addSimilarityRecord(record: SimilarityRecord) {
+    this.similarityRecords = [...this.similarityRecords, record]
+  }
+
+  @Mutation
+  addUserRecord(record: UserRecord) {
+    this.userRecords = [...this.userRecords, record]
   }
 
   @Action
-  async getRecords() {
+  async getSimilarityRecords() {
     const response = await axios.get('.netlify/functions/similarity')
     const records: SimilarityRecord[] = response.data
-    records.forEach((record) => this.addRecord(record))
+    records.forEach((record) => this.addSimilarityRecord(record))
+  }
+
+  @Action
+  async getUserRecords() {
+    const response = await axios.get('.netlify/functions/users')
+    const records: UserRecord[] = response.data
+    records.forEach((record) => this.addUserRecord(record))
   }
 }
