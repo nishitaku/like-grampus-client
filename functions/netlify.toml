@@ -1,2 +1,3 @@
 [build]
   Command = "yarn build"
+  functions = "dist"

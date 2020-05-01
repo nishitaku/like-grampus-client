@@ -6,6 +6,7 @@
   "private": true,
   "scripts": {
     "dev": "nuxt-ts",
+    "prebuild": "cd functions && yarn install",
     "build": "nuxt-ts build",
     "generate": "nuxt-ts generate",
     "start": "nuxt-ts start",
