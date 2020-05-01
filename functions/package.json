@@ -1,0 +1,19 @@
+{
+  "name": "like-grampus-client-functions",
+  "version": "1.0.0",
+  "description": "Netlify Functions",
+  "author": "",
+  "private": true,
+  "scripts": {
+    "dev": "netlify-lambda serve api --config webpack.functions.js",
+    "build": "netlify-lambda build api"
+  },
+  "dependencies": {
+    "@kintone/rest-api-client": "^1.2.0"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.51",
+    "dotenv-webpack": "^1.7.0",
+    "netlify-lambda": "^1.6.3"
+  }
+}
