@@ -25,7 +25,7 @@
                 </v-list-item-avatar>
               </v-list-item>
               <v-divider
-                v-if="index + 1 < items.length"
+                v-if="index + 1 < similarityRecordsWithUserName.length"
                 :key="record.id"
               ></v-divider>
             </template>
@@ -53,26 +53,6 @@ interface SimilarityWithUserName {
 export default class IndexComponent extends Vue {
   username = 'テスト'
   rank = '5'
-  items = [
-    {
-      displayName: 'AAA',
-      score: 0.9,
-      uploadImgUrl:
-        'https://upload-images.s3.jp-tok.cloud-object-storage.appdomain.cloud/f33e07cade6721fd86c7af1676d2a6.jpg'
-    },
-    {
-      displayName: 'AAA',
-      score: 0.9,
-      uploadImgUrl:
-        'https://upload-images.s3.jp-tok.cloud-object-storage.appdomain.cloud/f33e07cade6721fd86c7af1676d2a6.jpg'
-    },
-    {
-      displayName: 'AAA',
-      score: 0.9,
-      uploadImgUrl:
-        'https://upload-images.s3.jp-tok.cloud-object-storage.appdomain.cloud/f33e07cade6721fd86c7af1676d2a6.jpg'
-    }
-  ]
 
   get similarityRecordsWithUserName() {
     const similarityRecords = kintoneStore.similarityRecords
