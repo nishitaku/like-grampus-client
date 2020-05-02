@@ -1,6 +1,11 @@
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators'
 import axios from 'axios'
 
+export interface KintoneState {
+  similarityRecords: SimilarityRecord[]
+  userRecords: UserRecord[]
+}
+
 export interface KintoneRecord {
   type: string
   value: string
@@ -30,7 +35,7 @@ export interface UserRecord {
   stateFactory: true,
   namespaced: true
 })
-export default class KintoneStore extends VuexModule {
+export default class KintoneStore extends VuexModule implements KintoneState {
   similarityRecords: SimilarityRecord[] = []
   userRecords: UserRecord[] = []
 
