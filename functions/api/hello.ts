@@ -1,8 +1,8 @@
-import { Handler, Context, Callback, APIGatewayEvent } from 'aws-lambda'
+import { Handler, Context, Callback, APIGatewayEvent } from 'aws-lambda';
 
 interface HelloResponse {
-  statusCode: number
-  body: string
+  statusCode: number;
+  body: string;
 }
 
 export const handler: Handler = (
@@ -10,7 +10,7 @@ export const handler: Handler = (
   context: Context,
   callback: Callback
 ) => {
-  const params = event.queryStringParameters
+  const params = event.queryStringParameters;
   const response: HelloResponse = {
     statusCode: 200,
     body: JSON.stringify({
@@ -18,7 +18,7 @@ export const handler: Handler = (
       requestId: context.awsRequestId || 'dummy',
       params
     })
-  }
+  };
 
-  callback(undefined, response)
-}
+  callback(undefined, response);
+};

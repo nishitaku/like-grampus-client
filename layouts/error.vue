@@ -13,22 +13,22 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'nuxt-property-decorator'
+import { Component, Vue, Prop } from 'nuxt-property-decorator';
 
 @Component({ layout: 'empty' })
 export default class ErrorLayout extends Vue {
   @Prop({ type: Object, default: null })
-  error: any
+  error: any;
 
-  pageNotFound = '404 Not Found'
-  otherError = 'An error occurred'
+  pageNotFound = '404 Not Found';
+  otherError = 'An error occurred';
 
   head() {
     const title =
-      this.error.statusCode === 404 ? this.pageNotFound : this.otherError
+      this.error.statusCode === 404 ? this.pageNotFound : this.otherError;
     return {
       title
-    }
+    };
   }
 }
 </script>

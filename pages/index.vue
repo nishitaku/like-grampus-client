@@ -37,33 +37,33 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'nuxt-property-decorator'
-import { kintoneStore } from '~/store'
+import { Component, Vue } from 'nuxt-property-decorator';
+import { kintoneStore } from '~/store';
 
 interface SimilarityWithUserName {
-  id: string
-  lineDisplayName: string
-  linePictureUrl: string
-  className: string
-  score: string
-  imageUrl: string
+  id: string;
+  lineDisplayName: string;
+  linePictureUrl: string;
+  className: string;
+  score: string;
+  imageUrl: string;
 }
 
 @Component
 export default class IndexComponent extends Vue {
-  username = 'テスト'
-  rank = '5'
+  username = 'テスト';
+  rank = '5';
 
   get similarityRecordsWithUserName() {
-    const similarityRecords = kintoneStore.similarityRecords
-    const userRecords = kintoneStore.userRecords
+    const similarityRecords = kintoneStore.similarityRecords;
+    const userRecords = kintoneStore.userRecords;
     const result: SimilarityWithUserName[] = similarityRecords.map(
       (similarityRecord) => {
         const matchedUser = userRecords.find(
           (userRecord) =>
             userRecord.line_user_id.value ===
             similarityRecord.line_user_id.value
-        )
+        );
         const record: SimilarityWithUserName = {
           id: similarityRecord.$id.value,
           lineDisplayName: matchedUser
@@ -73,11 +73,11 @@ export default class IndexComponent extends Vue {
           className: similarityRecord.class_name.value,
           score: similarityRecord.score.value,
           imageUrl: similarityRecord.image_url.value
-        }
-        return record
+        };
+        return record;
       }
-    )
-    return result
+    );
+    return result;
   }
 
   async mounted() {
@@ -86,22 +86,22 @@ export default class IndexComponent extends Vue {
         { liffId: process.env.LIFF_ID || '' },
         async (data) => {
           if (liff.isLoggedIn()) {
-            console.log(`LIFF logged in`, data)
-            const profile = await liff.getProfile()
-            this.username = profile.displayName
+            console.log(`LIFF logged in`, data);
+            const profile = await liff.getProfile();
+            this.username = profile.displayName;
           } else {
-            console.log(`LIFF not logged in`)
+            console.log(`LIFF not logged in`);
           }
         },
         (err) => {
-          console.log(`LIFF initialization failed`, err)
+          console.log(`LIFF initialization failed`, err);
         }
-      )
+      );
 
-      await kintoneStore.getSimilarityRecords()
-      await kintoneStore.getUserRecords()
+      await kintoneStore.getSimilarityRecords();
+      await kintoneStore.getUserRecords();
     } catch (err) {
-      console.error(`${err}`)
+      console.error(`${err}`);
     }
   }
 }

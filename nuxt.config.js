@@ -1,4 +1,4 @@
-import colors from 'vuetify/es5/util/colors'
+import colors from 'vuetify/es5/util/colors';
 
 export default {
   mode: 'spa',
@@ -88,4 +88,4 @@ export default {
       pathRewrite: { '^/.netlify/functions': '' }
     }
   }
-}
+};

@@ -12,10 +12,10 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'nuxt-property-decorator'
+import { Component, Vue } from 'nuxt-property-decorator';
 
 @Component
 export default class DefaultComponent extends Vue {
-  title = 'RANKING'
+  title = 'RANKING';
 }
 </script>
