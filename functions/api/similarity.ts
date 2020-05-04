@@ -3,6 +3,9 @@ import { KintoneRestAPIClient } from '@kintone/rest-api-client';
 import { SimilarityRecord, UserRecord } from '../interface/kintone.interface';
 import { Response } from '../interface/common.interface';
 
+// 最大取得件数の最大値
+const DEFAULT_FETCH_MAX = 100;
+
 interface SimilarityWithUserName {
   id: string;
   lineDisplayName: string;
@@ -20,23 +23,40 @@ export const handler: Handler = async (
   console.log(`context=${JSON.stringify(context)}`);
   let response: Response;
   if (event.httpMethod === 'GET') {
+    let max = DEFAULT_FETCH_MAX;
+    const queryParameters = event.queryStringParameters;
+    if (
+      queryParameters &&
+      Object.prototype.hasOwnProperty.call(queryParameters, 'max') &&
+      Number.isInteger(Number(queryParameters.max))
+    ) {
+      max = Number(queryParameters.max);
+    }
     const classifiedAppClient = createClassifiedAppClient();
     const classifiedAppResponse = await classifiedAppClient.record.getRecords<
       SimilarityRecord
     >({
       app: process.env.KINTONE_CLASSIFIED_APP_ID || ''
     });
+
+    // スコアで降順ソート
+    const sortedSimilarityRecords = [
+      ...classifiedAppResponse.records
+    ].sort((a, b) => (Number(a.score.value) < Number(b.score.value) ? 1 : -1));
+
+    // 最大取得件数でフィルタ
+    const filteredSimilarityRecords = sortedSimilarityRecords.slice(0, max);
     console.log(
-      `classifiedAppResponse=${JSON.stringify(classifiedAppResponse)}`
+      `filteredSimilarityRecords=${JSON.stringify(filteredSimilarityRecords)}`
     );
 
     const userAppClient = createUserAppClient();
     const userAppResponse = await userAppClient.record.getRecords<UserRecord>({
       app: process.env.KINTONE_USER_APP_ID || ''
     });
-    console.log(`userAppResponse=${JSON.stringify(userAppResponse)}`);
+    // console.log(`userAppResponse=${JSON.stringify(userAppResponse)}`);
 
-    const similairtyWithUserNames: SimilarityWithUserName[] = classifiedAppResponse.records.map(
+    const similairtyWithUserNames: SimilarityWithUserName[] = filteredSimilarityRecords.map(
       (similarityRecord) => {
         const matchedUser = userAppResponse.records.find(
           (userRecord) =>
