@@ -67,7 +67,7 @@ export default class IndexComponent extends Vue {
         }
       );
 
-      await kintoneStore.getSimilarityRecords();
+      await kintoneStore.getSimilarityRecords(10);
     } catch (err) {
       console.error(`${err}`);
     }

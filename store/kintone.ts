@@ -23,14 +23,19 @@ export default class KintoneStore extends VuexModule implements KintoneState {
   similarityRecords: SimilarityWithUserName[] = [];
 
   @Mutation
-  addSimilarityRecord(record: SimilarityWithUserName) {
-    this.similarityRecords = [...this.similarityRecords, record];
+  setSimilarityRecord(records: SimilarityWithUserName[]) {
+    this.similarityRecords = records;
   }
 
   @Action
-  async getSimilarityRecords() {
-    const response = await axios.get('.netlify/functions/similarity');
+  async getSimilarityRecords(max: number) {
+    const params = {
+      max
+    };
+    const response = await axios.get('.netlify/functions/similarity', {
+      params
+    });
     const records: SimilarityWithUserName[] = response.data;
-    records.forEach((record) => this.addSimilarityRecord(record));
+    this.setSimilarityRecord(records);
   }
 }
