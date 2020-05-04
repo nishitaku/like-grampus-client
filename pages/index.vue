@@ -9,20 +9,27 @@
       justify="center"
     >
       <v-card color="teal darken-3" class="mt-4 px-2">
-        <v-row>
+        <v-row dense>
           <v-col cols="2" align-self="center">
             <v-img :src="createRankingImagePath(index)" />
           </v-col>
-          <v-col cols="2" align-self="center">
+          <v-spacer></v-spacer>
+          <v-col cols="auto" align-self="center">
             <v-avatar color="white">
               <img v-if="record.linePictureUrl" :src="record.linePictureUrl" />
               <v-icon v-else color="blue" large>mdi-account-circle</v-icon>
             </v-avatar>
           </v-col>
-          <v-col cols="6" align-self="center"
-            >{{ record.lineDisplayName }}さん</v-col
+          <v-col cols="6" align-self="center" class="font-weight-medium title">
+            {{ record.lineDisplayName }}<br />さん
+          </v-col>
+          <v-col
+            cols="2"
+            align-self="center"
+            class="text-center font-weight-bold headline"
           >
-          <v-col cols="2" align-self="center">{{ record.score }}</v-col>
+            {{ createScoreStr(record.score) }}
+          </v-col>
         </v-row>
       </v-card>
     </v-row>
@@ -69,6 +76,10 @@ export default class IndexComponent extends Vue {
   createRankingImagePath(index: number): string {
     const indexStr = ('00' + (index + 1)).slice(-2);
     return `icon-rank-tk02_b${indexStr}.png`;
+  }
+
+  createScoreStr(score: number): string {
+    return `${score * 100}`;
   }
 }
 </script>
