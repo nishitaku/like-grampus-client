@@ -8,7 +8,7 @@
         <v-list two-line disabled>
           <v-list-item-group>
             <template v-for="(record, index) in similarityRecordsWithUserName">
-              <v-list-item :key="record.id">
+              <v-list-item :key="`first-${record.id}`">
                 <v-list-item-icon>
                   <v-icon>mdi-star</v-icon>
                 </v-list-item-icon>
@@ -26,7 +26,7 @@
               </v-list-item>
               <v-divider
                 v-if="index + 1 < similarityRecordsWithUserName.length"
-                :key="record.id"
+                :key="`second-${record.id}`"
               ></v-divider>
             </template>
           </v-list-item-group>
