@@ -3,34 +3,27 @@
     <v-row justify="center">
       <div class="text-center">{{ username }}さんの順位 {{ rank }}位</div>
     </v-row>
-    <v-row justify="center">
-      <v-card width="80%">
-        <v-list two-line disabled>
-          <v-list-item-group>
-            <template v-for="(record, index) in similarityRecordsWithUserName">
-              <v-list-item :key="`first-${record.id}`">
-                <v-list-item-icon>
-                  <v-icon>mdi-star</v-icon>
-                </v-list-item-icon>
-                <v-list-item-content>
-                  <v-list-item-title
-                    v-text="`${record.lineDisplayName} さん`"
-                  ></v-list-item-title>
-                  <v-list-item-subtitle
-                    v-text="record.score"
-                  ></v-list-item-subtitle>
-                </v-list-item-content>
-                <v-list-item-avatar>
-                  <v-img :src="record.imageUrl"></v-img>
-                </v-list-item-avatar>
-              </v-list-item>
-              <v-divider
-                v-if="index + 1 < similarityRecordsWithUserName.length"
-                :key="`second-${record.id}`"
-              ></v-divider>
-            </template>
-          </v-list-item-group>
-        </v-list>
+    <v-row
+      v-for="(record, index) in similarityRecordsWithUserName"
+      :key="`first-${record.id}`"
+      justify="center"
+    >
+      <v-card color="teal darken-3" class="mt-4 px-2">
+        <v-row>
+          <v-col cols="2" align-self="center">
+            <v-img :src="createRankingImagePath(index)" />
+          </v-col>
+          <v-col cols="2" align-self="center">
+            <v-avatar color="white">
+              <img v-if="record.linePictureUrl" :src="record.linePictureUrl" />
+              <v-icon v-else color="blue" large>mdi-account-circle</v-icon>
+            </v-avatar>
+          </v-col>
+          <v-col cols="6" align-self="center"
+            >{{ record.lineDisplayName }}さん</v-col
+          >
+          <v-col cols="2" align-self="center">{{ record.score }}</v-col>
+        </v-row>
       </v-card>
     </v-row>
   </v-container>
@@ -71,6 +64,11 @@ export default class IndexComponent extends Vue {
     } catch (err) {
       console.error(`${err}`);
     }
+  }
+
+  createRankingImagePath(index: number): string {
+    const indexStr = ('00' + (index + 1)).slice(-2);
+    return `icon-rank-tk02_b${indexStr}.png`;
   }
 }
 </script>
