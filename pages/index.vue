@@ -1,14 +1,16 @@
 <template>
   <v-container>
     <v-row justify="center">
-      <div class="text-center">{{ username }}さんの順位 {{ rank }}位</div>
+      <v-card color="accent" class="text-center" width="100%"
+        >{{ username }}さんの順位 {{ rank }}位</v-card
+      >
     </v-row>
     <v-row
       v-for="(record, index) in similarityRecordsWithUserName"
       :key="`first-${record.id}`"
       justify="center"
     >
-      <v-card color="teal darken-3" class="mt-4 px-2">
+      <v-card color="secondary" class="mt-4 px-2">
         <v-row dense>
           <v-col cols="2" align-self="center">
             <v-img :src="createRankingImagePath(index)" />
@@ -21,7 +23,7 @@
             </v-avatar>
           </v-col>
           <v-col cols="6" align-self="center" class="font-weight-medium title">
-            {{ record.lineDisplayName }}<br />さん
+            {{ record.lineDisplayName }}
           </v-col>
           <v-col
             cols="2"
