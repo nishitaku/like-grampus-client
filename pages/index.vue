@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container fluid>
     <v-row justify="center">
       <v-card color="accent" class="text-center" width="100%"
         >{{ username }}さんの順位 {{ rank }}位</v-card
@@ -9,26 +9,35 @@
       v-for="(record, index) in similarityRecordsWithUserName"
       :key="`first-${record.id}`"
       justify="center"
+      align="center"
     >
-      <v-card color="secondary" class="mt-4 px-2">
+      <v-card
+        color="secondary"
+        width="100%"
+        max-width="500px"
+        class="mt-4 px-3"
+      >
         <v-row dense>
           <v-col cols="2" align-self="center">
             <v-img :src="createRankingImagePath(index)" />
           </v-col>
-          <v-spacer></v-spacer>
-          <v-col cols="auto" align-self="center">
+          <v-col cols="2" align-self="center">
             <v-avatar color="white">
               <img v-if="record.linePictureUrl" :src="record.linePictureUrl" />
               <v-icon v-else color="blue" large>mdi-account-circle</v-icon>
             </v-avatar>
           </v-col>
-          <v-col cols="6" align-self="center" class="font-weight-medium title">
+          <v-col
+            cols="6"
+            align-self="center"
+            class="font-weight-medium subtitle-1"
+          >
             {{ record.lineDisplayName }}
           </v-col>
           <v-col
             cols="2"
             align-self="center"
-            class="text-center font-weight-bold headline"
+            class="text-center font-weight-bold title"
           >
             {{ createScoreStr(record.score) }}
           </v-col>
