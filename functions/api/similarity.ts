@@ -54,7 +54,7 @@ export const handler: Handler = async (
     const userAppResponse = await userAppClient.record.getRecords<UserRecord>({
       app: process.env.KINTONE_USER_APP_ID || ''
     });
-    // console.log(`userAppResponse=${JSON.stringify(userAppResponse)}`);
+    console.log(`userAppResponse=${JSON.stringify(userAppResponse)}`);
 
     const similairtyWithUserNames: SimilarityWithUserName[] = filteredSimilarityRecords.map(
       (similarityRecord) => {
