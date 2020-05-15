@@ -43,18 +43,32 @@ export const handler: Handler = async (
     const sortedSimilarityRecords = [
       ...classifiedAppResponse.records
     ].sort((a, b) => (Number(a.score.value) < Number(b.score.value) ? 1 : -1));
+    // console.log(
+    //   `sortedSimilarityRecords=${JSON.stringify(sortedSimilarityRecords)}`
+    // );
+
+    // ユーザーごとに最も高スコアのレコードのみ残す
+    const uniqSimilarityRecords = sortedSimilarityRecords.reduce((acc, cur) => {
+      if (!acc.some((b) => b.line_user_id.value === cur.line_user_id.value)) {
+        acc.push(cur);
+      }
+      return acc;
+    }, [] as SimilarityRecord[]);
+    // console.log(
+    //   `uniqSimilarityRecords=${JSON.stringify(uniqSimilarityRecords)}`
+    // );
 
     // 最大取得件数でフィルタ
-    const filteredSimilarityRecords = sortedSimilarityRecords.slice(0, max);
-    console.log(
-      `filteredSimilarityRecords=${JSON.stringify(filteredSimilarityRecords)}`
-    );
+    const filteredSimilarityRecords = uniqSimilarityRecords.slice(0, max);
+    // console.log(
+    //   `filteredSimilarityRecords=${JSON.stringify(filteredSimilarityRecords)}`
+    // );
 
     const userAppClient = createUserAppClient();
     const userAppResponse = await userAppClient.record.getRecords<UserRecord>({
       app: process.env.KINTONE_USER_APP_ID || ''
     });
-    console.log(`userAppResponse=${JSON.stringify(userAppResponse)}`);
+    // console.log(`userAppResponse=${JSON.stringify(userAppResponse)}`);
 
     const similairtyWithUserNames: SimilarityWithUserName[] = filteredSimilarityRecords.map(
       (similarityRecord) => {
