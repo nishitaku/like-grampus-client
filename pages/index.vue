@@ -89,8 +89,8 @@ export default class IndexComponent extends Vue {
     return `icon-rank-tk02_b${indexStr}.png`;
   }
 
-  createScoreStr(score: number): string {
-    return `${score * 100}`;
+  createScoreStr(score: string): string {
+    return `${(Number(score) * 100).toFixed(0)} 点`;
   }
 }
 </script>
