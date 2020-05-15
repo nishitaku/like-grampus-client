@@ -54,7 +54,8 @@ import { kintoneStore } from '~/store';
 @Component
 export default class IndexComponent extends Vue {
   username = 'テスト';
-  rank = '5';
+  rank = '0';
+  profile: any;
 
   get similarityRecordsWithUserName() {
     return kintoneStore.similarityRecords;
@@ -62,13 +63,16 @@ export default class IndexComponent extends Vue {
 
   async mounted() {
     try {
+      await kintoneStore.getSimilarityRecords(10);
+
       liff.init(
         { liffId: process.env.LIFF_ID || '' },
         async (data) => {
           if (liff.isLoggedIn()) {
             console.log(`LIFF logged in`, data);
-            const profile = await liff.getProfile();
-            this.username = profile.displayName;
+            this.profile = await liff.getProfile();
+            this.username = this.profile.displayName;
+            this.rank = this.getRankByLineDisplayName(this.profile.displayName);
           } else {
             console.log(`LIFF not logged in`);
           }
@@ -77,8 +81,6 @@ export default class IndexComponent extends Vue {
           console.log(`LIFF initialization failed`, err);
         }
       );
-
-      await kintoneStore.getSimilarityRecords(10);
     } catch (err) {
       console.error(`${err}`);
     }
@@ -91,6 +93,15 @@ export default class IndexComponent extends Vue {
 
   createScoreStr(score: string): string {
     return `${(Number(score) * 100).toFixed(0)} 点`;
+  }
+
+  getRankByLineDisplayName(lineDisplayName: string) {
+    const rank =
+      kintoneStore.similarityRecords.findIndex(
+        (record) => record.lineDisplayName === lineDisplayName
+      ) + 1;
+    console.log(`rank=${rank}`);
+    return rank.toString();
   }
 }
 </script>
