@@ -62,7 +62,9 @@
 
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator';
+import { FlexMessage } from '@line/bot-sdk';
 import { kintoneStore } from '~/store';
+import { SimilarityWithUserName } from '~/store/kintone';
 
 @Component
 export default class IndexComponent extends Vue {
@@ -71,6 +73,7 @@ export default class IndexComponent extends Vue {
   profile: any;
   isAlert = false;
   alertMessage = '';
+  loginUserInfo?: SimilarityWithUserName;
 
   get similarityRecordsWithUserName() {
     return kintoneStore.similarityRecords;
@@ -88,6 +91,9 @@ export default class IndexComponent extends Vue {
             this.profile = await liff.getProfile();
             this.username = this.profile.displayName;
             this.rank = this.getRankByLineDisplayName(this.profile.displayName);
+            this.loginUserInfo = this.getLoginUserInfo(
+              this.profile.displayName
+            );
           } else {
             console.log(`LIFF not logged in`);
           }
@@ -110,13 +116,20 @@ export default class IndexComponent extends Vue {
     return `${(Number(score) * 100).toFixed(0)} 点`;
   }
 
-  getRankByLineDisplayName(lineDisplayName: string) {
+  getRankByLineDisplayName(lineDisplayName: string): string {
     const rank =
       kintoneStore.similarityRecords.findIndex(
         (record) => record.lineDisplayName === lineDisplayName
       ) + 1;
-    console.log(`rank=${rank}`);
     return rank.toString();
+  }
+
+  getLoginUserInfo(
+    lineDisplayName: string
+  ): SimilarityWithUserName | undefined {
+    return kintoneStore.similarityRecords.find(
+      (record) => record.lineDisplayName === lineDisplayName
+    );
   }
 
   async lineshare() {
@@ -124,10 +137,11 @@ export default class IndexComponent extends Vue {
     if (liff.isApiAvailable('shareTargetPicker')) {
       try {
         await liff.shareTargetPicker([
-          {
-            type: 'text',
-            text: 'Hello Share Target Picker'
-          }
+          this.createFlexMessage(
+            this.loginUserInfo?.imageUrl || '',
+            this.loginUserInfo?.imageUrl || '',
+            this.loginUserInfo?.linePictureUrl || ''
+          )
         ]);
         console.log(`shareTargetPicker success!`);
       } catch (error) {
@@ -138,6 +152,96 @@ export default class IndexComponent extends Vue {
       this.alertMessage = 'すまん、端末が対応してへんみたいやわ';
       this.isAlert = true;
     }
+  }
+
+  createFlexMessage(
+    uploadImageUrl: string,
+    playerImageUrl: string,
+    linePictureUrl: string
+  ): FlexMessage {
+    return {
+      type: 'flex',
+      altText: 'This is a Flex Message',
+      contents: {
+        type: 'bubble',
+        body: {
+          type: 'box',
+          layout: 'vertical',
+          contents: [
+            {
+              type: 'box',
+              layout: 'horizontal',
+              contents: [
+                {
+                  type: 'image',
+                  url: uploadImageUrl,
+                  size: '5xl',
+                  aspectMode: 'cover',
+                  aspectRatio: '1:1',
+                  gravity: 'center',
+                  flex: 1
+                },
+                {
+                  type: 'image',
+                  url: playerImageUrl,
+                  flex: 1,
+                  gravity: 'center',
+                  size: '5xl',
+                  aspectRatio: '1:1',
+                  aspectMode: 'cover'
+                }
+              ]
+            },
+            {
+              type: 'box',
+              layout: 'horizontal',
+              contents: [
+                {
+                  type: 'box',
+                  layout: 'vertical',
+                  contents: [
+                    {
+                      type: 'image',
+                      url: linePictureUrl,
+                      aspectMode: 'cover',
+                      size: 'full'
+                    }
+                  ],
+                  cornerRadius: '100px',
+                  width: '72px',
+                  height: '72px'
+                },
+                {
+                  type: 'box',
+                  layout: 'vertical',
+                  contents: [
+                    {
+                      type: 'text',
+                      text: '私と鈴木選手は',
+                      size: 'md',
+                      wrap: true
+                    },
+                    {
+                      type: 'text',
+                      text: 'そっくり度'
+                    },
+                    {
+                      type: 'text',
+                      text: '90 点',
+                      align: 'end',
+                      size: 'xl'
+                    }
+                  ]
+                }
+              ],
+              spacing: 'xl',
+              paddingAll: '20px'
+            }
+          ],
+          paddingAll: '0px'
+        }
+      }
+    };
   }
 }
 </script>
