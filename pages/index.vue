@@ -1,5 +1,10 @@
 <template>
   <v-container fluid>
+    <v-row>
+      <v-alert v-model="isAlert" type="info" dense dismissible>
+        {{ alertMessage }}
+      </v-alert>
+    </v-row>
     <v-row justify="center">
       <v-card color="accent" class="text-center" width="100%">
         {{ username }}さんの順位 {{ rank }}位
@@ -64,6 +69,8 @@ export default class IndexComponent extends Vue {
   username = 'テスト';
   rank = '0';
   profile: any;
+  isAlert = false;
+  alertMessage = '';
 
   get similarityRecordsWithUserName() {
     return kintoneStore.similarityRecords;
@@ -128,6 +135,8 @@ export default class IndexComponent extends Vue {
       }
     } else {
       console.log(`shareTargetPicker not available`);
+      this.alertMessage = 'すまん、端末が対応してへんみたいやわ';
+      this.isAlert = true;
     }
   }
 }
