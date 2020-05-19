@@ -171,18 +171,23 @@ export default class IndexComponent extends Vue {
   async lineshare() {
     console.log(`lineshare`);
     if (liff.isApiAvailable('shareTargetPicker')) {
-      try {
-        await liff.shareTargetPicker([
-          this.createFlexMessage(
-            this.loginUserInfo?.imageUrl || '',
-            this.getPlayerImageUrl(this.loginUserInfo?.className || ''),
-            this.loginUserInfo?.className || '',
-            this.loginUserInfo?.score || ''
-          )
-        ]);
-        console.log(`shareTargetPicker success!`);
-      } catch (error) {
-        console.log(`shareTargetPicker failed!`);
+      if (this.loginUserInfo) {
+        try {
+          await liff.shareTargetPicker([
+            this.createFlexMessage(
+              this.loginUserInfo.imageUrl,
+              this.getPlayerImageUrl(this.loginUserInfo.className),
+              this.loginUserInfo.className,
+              this.loginUserInfo.score
+            )
+          ]);
+          console.log(`shareTargetPicker success!`);
+        } catch (error) {
+          console.log(`shareTargetPicker failed!`);
+        }
+      } else {
+        this.alertMessage = 'ランキング入ってないで〜';
+        this.isAlert = true;
       }
     } else {
       console.log(`shareTargetPicker not available`);
