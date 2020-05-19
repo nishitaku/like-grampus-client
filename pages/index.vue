@@ -112,8 +112,23 @@ export default class IndexComponent extends Vue {
     return rank.toString();
   }
 
-  lineshare() {
+  async lineshare() {
     console.log(`lineshare`);
+    if (liff.isApiAvailable('shareTargetPicker')) {
+      try {
+        await liff.shareTargetPicker([
+          {
+            type: 'text',
+            text: 'Hello Share Target Picker'
+          }
+        ]);
+        console.log(`shareTargetPicker success!`);
+      } catch (error) {
+        console.log(`shareTargetPicker failed!`);
+      }
+    } else {
+      console.log(`shareTargetPicker not available`);
+    }
   }
 }
 </script>
