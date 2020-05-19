@@ -75,6 +75,38 @@ export default class IndexComponent extends Vue {
   alertMessage = '';
   loginUserInfo?: SimilarityWithUserName;
 
+  playerNameMap: Map<string, string> = new Map([
+    ['abehiroyuki_11', '阿部浩之'],
+    ['akiyamayosuke_14', '秋山陽介'],
+    ['aokiryota_19', '青木亮太'],
+    ['ariajasuru_9', '長谷川アーリアジャスール'],
+    ['chibakazuhiko_5', '千葉和彦'],
+    ['fujiiharuya_13', '藤井陽也'],
+    ['inagakisyo_15', '稲垣祥'],
+    ['ishidaryotaro_24', '石田凌太郎'],
+    ['jo_7', 'ジョー'],
+    ['langerak_1', 'ランゲラック'],
+    ['maedanaoki_25', '前田直輝'],
+    ['maruyamayuichi_3', '丸山祐市'],
+    ['mateus_16', 'マテウス'],
+    ['mitsuidaiki_22', '三井大輝'],
+    ['miyaharakazuya_6', '宮原和也'],
+    ['nakatanishinnosuke_4', '中谷進之介'],
+    ['narazakiseigo', '楢崎正剛'],
+    ['naruseshumpei_26', '成瀬竣平'],
+    ['otakosuke_36', '太田宏介'],
+    ['shibuyatsubasa_18', '渋谷飛翔'],
+    ['simicchi_8', 'ジョアン シミッチ'],
+    ['somayuki_27', '相馬勇紀'],
+    ['syabieru_10', 'シャビエル'],
+    ['takedayohei_21', '武田洋平'],
+    ['takujiyonemoto_2', '米本拓司'],
+    ['watanabeshuto_20', '渡邉柊斗'],
+    ['yamasakiryogo_17', '山﨑凌吾'],
+    ['yoshidaakira_28', '吉田晃'],
+    ['yoshidayutaka_23', '吉田豊']
+  ]);
+
   get similarityRecordsWithUserName() {
     return kintoneStore.similarityRecords;
   }
@@ -132,6 +164,10 @@ export default class IndexComponent extends Vue {
     );
   }
 
+  getPlayerImageUrl(className: string): string {
+    return `https://grampus-player.s3.jp-tok.cloud-object-storage.appdomain.cloud/${className}.jpg`;
+  }
+
   async lineshare() {
     console.log(`lineshare`);
     if (liff.isApiAvailable('shareTargetPicker')) {
@@ -139,8 +175,9 @@ export default class IndexComponent extends Vue {
         await liff.shareTargetPicker([
           this.createFlexMessage(
             this.loginUserInfo?.imageUrl || '',
-            this.loginUserInfo?.imageUrl || '',
-            this.loginUserInfo?.linePictureUrl || ''
+            this.getPlayerImageUrl(this.loginUserInfo?.className || ''),
+            this.loginUserInfo?.className || '',
+            this.loginUserInfo?.score || ''
           )
         ]);
         console.log(`shareTargetPicker success!`);
@@ -157,7 +194,8 @@ export default class IndexComponent extends Vue {
   createFlexMessage(
     uploadImageUrl: string,
     playerImageUrl: string,
-    linePictureUrl: string
+    playerClassName: string,
+    score: string
   ): FlexMessage {
     return {
       type: 'flex',
@@ -201,35 +239,26 @@ export default class IndexComponent extends Vue {
                   layout: 'vertical',
                   contents: [
                     {
-                      type: 'image',
-                      url: linePictureUrl,
-                      aspectMode: 'cover',
-                      size: 'full'
-                    }
-                  ],
-                  cornerRadius: '100px',
-                  width: '72px',
-                  height: '72px'
-                },
-                {
-                  type: 'box',
-                  layout: 'vertical',
-                  contents: [
-                    {
                       type: 'text',
-                      text: '私と鈴木選手は',
+                      text: `${this.playerNameMap.get(playerClassName)}選手`,
                       size: 'md',
-                      wrap: true
+                      wrap: true,
+                      weight: 'bold'
                     },
                     {
                       type: 'text',
-                      text: 'そっくり度'
+                      text: 'との、そっくり度が'
                     },
                     {
                       type: 'text',
-                      text: '90 点',
-                      align: 'end',
-                      size: 'xl'
+                      text: this.createScoreStr(score),
+                      align: 'center',
+                      size: 'xl',
+                      weight: 'bold'
+                    },
+                    {
+                      type: 'text',
+                      text: 'だぎゃあ'
                     }
                   ]
                 }
