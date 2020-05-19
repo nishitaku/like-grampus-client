@@ -5,19 +5,6 @@
         {{ alertMessage }}
       </v-alert>
     </v-row>
-    <v-row justify="center">
-      <v-card color="accent" class="text-center" width="100%">
-        {{ username }}さんの順位 {{ rank }}位
-        <v-card-actions>
-          <v-img
-            src="wide-default.png"
-            height="30px"
-            contain
-            @click="lineshare"
-          />
-        </v-card-actions>
-      </v-card>
-    </v-row>
     <v-row
       v-for="(record, index) in similarityRecordsWithUserName"
       :key="`first-${record.id}`"
@@ -25,7 +12,7 @@
       align="center"
     >
       <v-card
-        color="secondary"
+        :color="record.lineDisplayName == username ? 'accent' : 'secondary'"
         width="100%"
         max-width="500px"
         class="mt-4 px-3"
@@ -41,14 +28,14 @@
             </v-avatar>
           </v-col>
           <v-col
-            cols="6"
+            cols="5"
             align-self="center"
             class="font-weight-medium subtitle-1"
           >
             {{ record.lineDisplayName }}
           </v-col>
           <v-col
-            cols="2"
+            cols="3"
             align-self="center"
             class="text-center font-weight-bold title"
           >
@@ -56,6 +43,9 @@
           </v-col>
         </v-row>
       </v-card>
+    </v-row>
+    <v-row justify="center" align="center" class="mt-5">
+      <v-img src="wide-default.png" height="30px" contain @click="lineshare" />
     </v-row>
   </v-container>
 </template>
