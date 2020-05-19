@@ -1,9 +1,17 @@
 <template>
   <v-container fluid>
     <v-row justify="center">
-      <v-card color="accent" class="text-center" width="100%"
-        >{{ username }}さんの順位 {{ rank }}位</v-card
-      >
+      <v-card color="accent" class="text-center" width="100%">
+        {{ username }}さんの順位 {{ rank }}位
+        <v-card-actions>
+          <v-img
+            src="wide-default.png"
+            height="30px"
+            contain
+            @click="lineshare"
+          />
+        </v-card-actions>
+      </v-card>
     </v-row>
     <v-row
       v-for="(record, index) in similarityRecordsWithUserName"
@@ -102,6 +110,10 @@ export default class IndexComponent extends Vue {
       ) + 1;
     console.log(`rank=${rank}`);
     return rank.toString();
+  }
+
+  lineshare() {
+    console.log(`lineshare`);
   }
 }
 </script>
