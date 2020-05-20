@@ -27,12 +27,13 @@
               <v-icon v-else color="blue" large>mdi-account-circle</v-icon>
             </v-avatar>
           </v-col>
-          <v-col
-            cols="5"
-            align-self="center"
-            class="font-weight-medium subtitle-1"
-          >
-            {{ record.lineDisplayName }}
+          <v-col cols="5" align-self="center" class="pl-5">
+            <v-row class="font-weight-bold subtitle-1">
+              {{ record.lineDisplayName }}
+            </v-row>
+            <v-row class="font-weight-medium caption">
+              {{ playerNameMap.get(record.className) }} 選手
+            </v-row>
           </v-col>
           <v-col
             cols="3"
