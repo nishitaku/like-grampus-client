@@ -42,13 +42,7 @@ export default {
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     // Doc: https://github.com/nuxt-community/dotenv-module
-    [
-      '@nuxtjs/dotenv',
-      {
-        filename:
-          process.env.NODE_ENV !== 'production' ? '.env.dev' : '.env.prod'
-      }
-    ],
+    '@nuxtjs/dotenv',
     '@nuxtjs/proxy'
   ],
   /*
@@ -93,5 +87,8 @@ export default {
       target: 'http://localhost:9000',
       pathRewrite: { '^/.netlify/functions': '' }
     }
+  },
+  env: {
+    LIFF_ID: process.env.LIFF_ID
   }
 };
