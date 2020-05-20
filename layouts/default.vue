@@ -1,6 +1,9 @@
 <template>
   <v-app dark>
     <v-content>
+      <v-app-bar fixed app color="primary">
+        <v-toolbar-title class="font-weight-bold" v-text="title" />
+      </v-app-bar>
       <v-container>
         <nuxt />
       </v-container>
@@ -13,6 +16,6 @@ import { Component, Vue } from 'nuxt-property-decorator';
 
 @Component
 export default class DefaultComponent extends Vue {
-  title = 'RANKING';
+  title = '総合ランキング';
 }
 </script>
