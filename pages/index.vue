@@ -16,6 +16,7 @@
         width="100%"
         max-width="500px"
         class="mt-4 px-3"
+        @click="openDialog(record)"
       >
         <v-row dense>
           <v-col cols="2" align-self="center">
@@ -48,6 +49,19 @@
     <v-row justify="center" align="center" class="mt-5">
       <v-img src="wide-default.png" height="30px" contain @click="lineshare" />
     </v-row>
+    <v-dialog v-model="dialog" max-width="290">
+      <v-card color="secondary">
+        <v-card-title></v-card-title>
+        <v-card-text>
+          <v-img :src="dialogLineUserImageUrl" height="250"></v-img>
+          <v-img :src="dialogPlayerImageUrl" height="250"></v-img>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="black" @click="dialog = false">閉じる</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -65,6 +79,10 @@ export default class IndexComponent extends Vue {
   isAlert = false;
   alertMessage = '';
   loginUserInfo?: SimilarityWithUserName;
+
+  dialog = false;
+  dialogLineUserImageUrl = '';
+  dialogPlayerImageUrl = '';
 
   playerNameMap: Map<string, string> = new Map([
     ['abehiroyuki_11', '阿部浩之'],
@@ -157,6 +175,12 @@ export default class IndexComponent extends Vue {
 
   getPlayerImageUrl(className: string): string {
     return `https://grampus-player.s3.jp-tok.cloud-object-storage.appdomain.cloud/${className}.jpg`;
+  }
+
+  openDialog(record: SimilarityWithUserName) {
+    this.dialogLineUserImageUrl = record.imageUrl;
+    this.dialogPlayerImageUrl = this.getPlayerImageUrl(record.className);
+    this.dialog = true;
   }
 
   async lineshare() {
